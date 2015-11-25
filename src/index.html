@@ -56,7 +56,20 @@
                     <td data-bind="text: time"></td>
                 </tr>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5" data-bind="if: canUseLocalStorage">
+                        <button type="submit" class="btn btn-default" data-bind="click: clearTasks">Clear</button>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
+
+        <!-- ko if: canUseLocalStorage == false -->
+        <div class="alert alert-warning" role="alert">
+            <strong>Warning:</strong> it appears that local storage is disabled. If this window is closed or reloaded, all data in it will be lost.
+        </div>
+        <!-- /ko -->
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>

@@ -7,9 +7,33 @@
  * http://opensource.org/licenses/osl-3.0.php
  */
 var TasksModel = function() {
-    this.nextTask = ko.observable("");
-    this.tasks = ko.observableArray([]);
-    this.currentTask = ko.observable(false);
+
+    // Quick check if localStorage is enabled
+    this.canUseLocalStorage = (function() {
+        try {
+            localStorage.setItem('t', '');
+            localStorage.removeItem('t');
+
+            return true;
+        } catch (e) {
+            return false;
+        }
+    })();
+
+    this.data = [];
+
+    if (this.canUseLocalStorage && localStorage.getItem('time_data') !== null) {
+        this.data = JSON.parse(localStorage.getItem('time_data'));
+    } else {
+        this.data.tasks = [];
+        this.data.currentTask = false;
+    }
+
+    this.nextTask = ko.observable('');
+    this.tasks = ko.observableArray(this.data.tasks);
+    this.currentTask = ko.observable(this.data.currentTask);
+
+    delete(this.data);
 
     this.addTask = function() {
         if (this.nextTask() != "") {
@@ -28,8 +52,30 @@ var TasksModel = function() {
             });
 
             this.nextTask("");
+
+            this.saveData();
         }
     }.bind(this);
+
+    this.clearTasks = function() {
+        this.tasks([]);
+        this.currentTask(false);
+
+        this.saveData();
+    }.bind(this);
+
+    this.saveData = function() {
+        // save data using localStorage, if available
+        if (this.canUseLocalStorage) {
+            var json = ko.toJS(this);
+
+            // save some space in localStorage
+            delete(json.canUseLocalStorage);
+            delete(json.nextTask);
+
+            localStorage.setItem('time_data', JSON.stringify(json));
+        }
+    };
 
     this.formatTime = function(timestamp) {
         var seconds = timestamp / 1000;
