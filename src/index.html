@@ -37,6 +37,7 @@
         </div>
         <!-- /ko -->
 
+        <!-- ko if: tasks().length > 0 -->
         <table class="table table-condensed table-striped">
             <thead>
             <tr>
@@ -64,6 +65,7 @@
                 </tr>
             </tfoot>
         </table>
+        <!-- /ko -->
 
         <!-- ko if: canUseLocalStorage == false -->
         <div class="alert alert-warning" role="alert">
