@@ -59,9 +59,12 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="5" data-bind="if: canUseLocalStorage">
+                    <th data-bind="if: canUseLocalStorage">
                         <button type="submit" class="btn btn-default" data-bind="click: clearTasks">Clear</button>
-                    </td>
+                    </th>
+                    <th colspan="2"></th>
+                    <th>Total:</th>
+                    <th data-bind="text: totalTime"></th>
                 </tr>
             </tfoot>
         </table>

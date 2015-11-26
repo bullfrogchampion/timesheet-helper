@@ -33,6 +33,16 @@ var TasksModel = function() {
     this.tasks = ko.observableArray(this.data.tasks);
     this.currentTask = ko.observable(this.data.currentTask);
 
+    this.totalTime = ko.pureComputed(function() {
+        var total = 0;
+
+        ko.utils.arrayForEach(this.tasks(), function(task) {
+            total += task.end - task.start;
+        });
+
+        return this.formatTime(total);
+    }, this);
+
     delete(this.data);
 
     this.addTask = function() {
